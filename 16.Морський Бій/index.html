@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script>
+        class Ship {
+            constructor(imgSrc,hight, minSpeed, maxSpeed, minDirectionValue, maxDirectionValue)
+            {
+                this.DirectionX = this.getRandomValue(minDirectionValue, maxDirectionValue);
+                this.DirectionY = this.getRandomValue(minDirectionValue, maxDirectionValue);
+                this.ship = document.createElement("img");
+                this.ship.src = imgSrc;
+                this.ship.style.height = hight+"%";
+
+                this.Speed = this.getRandomValue(minSpeed, maxSpeed);
+            }
+            getRandomValue(minValue, maxValue)
+            {
+                return Math.floor(minValue + Math.random() * (maxValue - minValue + 1));
+            }
+            move()
+            {
+                let newX = this.X + this.DirectionX;
+                let newY = this.Y + this.DirectionY;
+                if (newX<0 || newX > parseInt(this.Container.clientWidth))
+                {
+                    this.DirectionX *= -1;
+                }
+                if (newY < 0 || newY > parseInt(this.Container.clientHeight)) {
+                    this.DirectionY *= -1;
+                }
+                this.X += this.DirectionX;
+                this.Y += this.DirectionY;
+                this.ship.style.left = this.X + "px";
+                this.ship.style.top = this.Y + "px";
+            }
+            render(containerID)
+            {
+                this.Container = document.getElementById(containerID);
+                this.X = this.getRandomValue(0, parseInt(this.Container.clientWidth));
+                this.Y = this.getRandomValue(0, parseInt(this.Container.clientHeight));
+                this.ship.style.left = this.X+"px";
+                this.ship.style.top = this.Y + "px";
+                this.ship.style.position = "absolute";
+                this.Container.appendChild(this.ship);
+                this.timer = setInterval(this.move.bind(this), this.Speed);
+            }
+        }
+        //---------------------------------
+        window.onload = function () {
+            var ship = new Ship('./img/ship.png', 29, 100, 200, 7, 30);
+            ship.render("battleField");
+        }
+    </script>
+    <style>
+        #battleField{
+            width:900px;
+            height:500px;
+            border:2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id="battleField">
+
+    </div>
+</body>
+</html>
